@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  /* Background ONLY on html+body — never on wrapper divs */
+  html, body {
+    background-color: #0a0f1a;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    min-height: 100%;
+  }
+
+  /* All sections transparent so canvas shows through */
+  section {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #0a0f1a; }
+  ::-webkit-scrollbar-thumb { background: #00d4b4; border-radius: 4px; }
+}
+
+@layer components {
+  .section-padding { @apply py-20 px-[5%] md:px-[8%] lg:px-[10%]; }
+  .section-label   { @apply text-sm font-dm font-medium tracking-[4px] uppercase text-cyan-400; }
+  .section-title   { @apply font-syne font-bold text-3xl md:text-4xl lg:text-5xl text-white; }
+
+  .btn-primary {
+    @apply bg-cyan-400 text-dark-900 font-dm font-semibold text-sm tracking-widest uppercase
+           px-7 py-3 rounded-lg transition-all duration-200
+           hover:bg-cyan-500 hover:-translate-y-0.5
+           hover:shadow-[0_8px_30px_rgba(0,212,180,0.3)]
+           active:translate-y-0;
+  }
+  .btn-outline {
+    @apply border border-cyan-400/40 text-cyan-400 font-dm font-medium text-sm tracking-widest uppercase
+           px-7 py-3 rounded-lg transition-all duration-200
+           hover:bg-cyan-400/10 hover:border-cyan-400;
+  }
+}
+
+@layer utilities {
+  .bg-glass      { background: rgba(10,15,26,0.6);  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .bg-glass-dark { background: rgba(10,15,26,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #00d4b4 0%, #00a8ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .card-dark {
+    background: rgba(13,20,34,0.8);
+    border: 1px solid rgba(0,212,180,0.08);
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-up { animation: fadeUp 0.7s ease forwards; }
+.animate-fade-in { animation: fadeIn 0.6s ease forwards; }
