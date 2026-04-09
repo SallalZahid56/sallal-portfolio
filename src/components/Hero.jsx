@@ -123,9 +123,9 @@ export default function Hero() {
 
   const statData = [
     { value: 2,   suffix: "+", label: "Years Exp."    },
-    { value: 15,  suffix: "+", label: "Projects"      },
+    { value: 16,  suffix: "+", label: "Projects"      },
     { value: 5,   suffix: "+", label: "Happy Clients" },
-    { value: 200, suffix: "+", label: "Code Commits"  },
+    { value: 300, suffix: "+", label: "Code Commits"  },
   ];
 
   return (
