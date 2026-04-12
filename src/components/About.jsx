@@ -3,8 +3,8 @@ import heroImg from "../assets/hero.jpg";
 
 const techTags = [
   "React.js", "Next.js", "Node.js", "Express.js",
-  "MongoDB", "PostgreSQL", "Tailwind CSS", "JavaScript",
-  "TypeScript", "Git", "Docker", "REST APIs",
+  "MongoDB", "PostgreSQL", "Tailwind CSS", "JavaScript", "Api Integration",
+  "TypeScript", "Git", "Docker", "REST APIs, GraphQL",
 ];
 
 function useInView(threshold = 0.15) {
