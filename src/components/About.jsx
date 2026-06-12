@@ -102,11 +102,7 @@ export default function About() {
                 <span className="absolute -bottom-2 -left-2 w-5 h-5 border-b-2 border-l-2 border-cyan-400 rounded-bl-md z-10" />
                 <span className="absolute -bottom-2 -right-2 w-5 h-5 border-b-2 border-r-2 border-cyan-400 rounded-br-md z-10" />
 
-                {/* Spinning conic border */}
-                <div className="absolute -inset-[2px] rounded-2xl pointer-events-none"
-                  style={{ background: "conic-gradient(from 0deg,#00d4b4,rgba(0,168,255,0.5),transparent 40%,transparent 60%,rgba(0,168,255,0.5),#00d4b4)",
-                           opacity: 0.4, borderRadius: "18px",
-                           animation: "aboutSpin 8s linear infinite" }} />
+                {/* Removed spinning conic border to keep image background static */}
 
                 {/* Outer glow */}
                 <div className="absolute -inset-5 rounded-2xl pointer-events-none"
@@ -214,12 +210,7 @@ export default function About() {
         </div>
       </div>
 
-      <style>{`
-        @keyframes aboutSpin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-      `}</style>
+      {/* Removed aboutSpin keyframes to stop background rotation */}
     </section>
   );
 }

@@ -93,26 +93,8 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const wrap = imgWrapRef.current;
-    if (!wrap) return;
-    const onMove = (e) => {
-      const rect = wrap.getBoundingClientRect();
-      const cx = rect.left + rect.width  / 2;
-      const cy = rect.top  + rect.height / 2;
-      const dx = (e.clientX - cx) / (window.innerWidth  / 2);
-      const dy = (e.clientY - cy) / (window.innerHeight / 2);
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 1.2) {
-        wrap.style.transform = `perspective(800px) rotateY(${dx * 10}deg) rotateX(${-dy * 10}deg) translateY(-14px)`;
-      }
-    };
-    const onLeave = () => { wrap.style.transform = ""; };
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseleave", onLeave);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseleave", onLeave);
-    };
+    // removed mousemove tilt effect to keep hero image static
+    return () => {};
   }, []);
 
   const socials = [
@@ -202,20 +184,14 @@ export default function Hero() {
           <div className="flex-shrink-0 flex items-center justify-center animate-fade-up"
             style={{ animationDelay: "0.35s", animationFillMode: "both" }}>
             <div ref={imgWrapRef} className="relative"
-              style={{ transition: "transform 0.12s ease-out", willChange: "transform",
-                       animation: "heroFloat 7s ease-in-out infinite" }}>
+              style={{ transition: "transform 0.12s ease-out", willChange: "transform" }}>
               <div className="absolute -inset-6 pointer-events-none"
                 style={{ background: "radial-gradient(ellipse, rgba(0,212,180,0.13) 0%, transparent 65%)",
                          borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%" }} />
-              <div className="absolute -inset-[3px] pointer-events-none"
-                style={{ background: "conic-gradient(from 0deg, #00d4b4, rgba(0,168,255,0.6), transparent 45%, transparent 55%, rgba(0,168,255,0.6), #00d4b4)",
-                         borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%",
-                         opacity: 0.55, animation: "blobRotate 8s linear infinite" }} />
               <div className="relative overflow-hidden border border-cyan-400/20"
                 style={{ width: "clamp(260px, 28vw, 360px)", aspectRatio: "3 / 4",
                          borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%",
-                         background: "linear-gradient(160deg, rgba(0,212,180,0.08), rgba(0,60,180,0.06))",
-                         animation: "blobMorph 9s ease-in-out infinite" }}>
+                         background: "linear-gradient(160deg, rgba(0,212,180,0.08), rgba(0,60,180,0.06))" }}>
                 <img src={heroImg} alt="Sallal Zahid"
                   className="w-full h-full object-cover object-top"
                   style={{ borderRadius: "inherit" }} />
@@ -249,16 +225,7 @@ export default function Hero() {
         <div className="w-1 h-1 rounded-full bg-cyan-400/40 animate-bounce" />
       </div>
 
-      <style>{`
-        @keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
-        @keyframes blobMorph {
-          0%,100%{border-radius:60% 40% 55% 45%/50% 45% 55% 50%}
-          25%{border-radius:50% 50% 40% 60%/55% 40% 60% 45%}
-          50%{border-radius:40% 60% 50% 50%/45% 55% 45% 55%}
-          75%{border-radius:55% 45% 60% 40%/50% 60% 40% 50%}
-        }
-        @keyframes blobRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-      `}</style>
+      {/* Removed animation keyframes to keep blob static */}
     </section>
   );
 }
