@@ -184,7 +184,7 @@ export default function Hero() {
           <div className="flex-shrink-0 flex items-center justify-center animate-fade-up"
             style={{ animationDelay: "0.35s", animationFillMode: "both" }}>
             <div ref={imgWrapRef} className="relative"
-              style={{ transition: "transform 0.12s ease-out", willChange: "transform" }}>
+              style={{ transition: "transform 0.12s ease-out", willChange: "transform", animation: "floatY 5s ease-in-out infinite" }}>
               <div className="absolute -inset-6 pointer-events-none"
                 style={{ background: "radial-gradient(ellipse, rgba(0,212,180,0.13) 0%, transparent 65%)",
                          borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%" }} />
@@ -225,7 +225,12 @@ export default function Hero() {
         <div className="w-1 h-1 rounded-full bg-cyan-400/40 animate-bounce" />
       </div>
 
-      {/* Removed animation keyframes to keep blob static */}
+      <style>{`
+        @keyframes floatY {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-16px); }
+        }
+      `}</style>
     </section>
   );
 }
