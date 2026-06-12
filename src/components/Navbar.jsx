@@ -90,11 +90,17 @@ export default function Navbar() {
     if (target) target.scrollIntoView({ behavior: "smooth" });
   };
 
-  const pillStyle = {
-    background: "rgba(13, 20, 34, 0.80)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-  };
+  const pillStyle = darkMode
+    ? {
+        background: "rgba(13, 20, 34, 0.80)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }
+    : {
+        background: "rgba(255,255,255,0.85)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      };
 
   return (
     <>
@@ -211,11 +217,19 @@ export default function Navbar() {
           ${menuOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-3 pointer-events-none"}`}
-        style={{
-          background: "rgba(10, 15, 26, 0.97)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-        }}
+        style={
+          darkMode
+            ? {
+                background: "rgba(10, 15, 26, 0.97)",
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+              }
+            : {
+                background: "rgba(255,255,255,0.96)",
+                backdropFilter: "blur(24px)",
+                WebkitBackdropFilter: "blur(24px)",
+              }
+        }
       >
         <ul className="flex flex-col gap-[2px] mb-3">
           {navLinks.map(link => {
