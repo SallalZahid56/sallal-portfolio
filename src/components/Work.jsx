@@ -192,7 +192,7 @@ export default function Work() {
         >
           {/* Main card */}
           <div
-            className="relative rounded-3xl border border-white/8 overflow-hidden group"
+            className="work-card relative rounded-3xl border border-white/8 overflow-hidden group"
             style={{ background: "rgba(13,20,34,0.7)", backdropFilter: "blur(20px)" }}
           >
             <div className="flex flex-col lg:flex-row min-h-[480px]" style={slideIn}>
@@ -204,7 +204,7 @@ export default function Work() {
               >
                 {/* Gradient background */}
                 <div
-                  className="absolute inset-0"
+                  className="work-left-gradient absolute inset-0"
                   style={{
                     background: `linear-gradient(135deg, ${p.accentColor}18 0%, rgba(0,10,30,0.95) 100%)`,
                   }}
@@ -227,7 +227,7 @@ export default function Work() {
 
                 {/* Live badge — bottom left */}
                 <div
-                  className="absolute bottom-5 left-5 flex items-center gap-2 px-4 py-2 rounded-full border border-white/15"
+                  className="work-live-badge absolute bottom-5 left-5 flex items-center gap-2 px-4 py-2 rounded-full border border-white/15"
                   style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(10px)" }}
                 >
                   <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse-slow" />

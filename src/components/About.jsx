@@ -64,7 +64,7 @@ export default function About() {
       {/* ── Card wrapper with top divider shadow line ── */}
       <div
         ref={sectionRef}
-        className="relative max-w-7xl mx-auto rounded-3xl overflow-hidden"
+        className="about-card relative max-w-7xl mx-auto rounded-3xl overflow-hidden"
         style={{
           background  : "rgba(10,14,22,0.85)",
           backdropFilter: "blur(20px)",
@@ -74,7 +74,7 @@ export default function About() {
         }}
       >
         {/* Subtle inner dark bg — kills particle dots inside card */}
-        <div className="absolute inset-0 pointer-events-none"
+        <div className="about-overlay absolute inset-0 pointer-events-none"
           style={{ background: "rgba(8,12,20,0.6)", zIndex: 0 }} />
 
         {/* Ambient glow inside card */}
@@ -126,15 +126,15 @@ export default function About() {
                 {/* Social icons — half on image, half below */}
                 <div className="absolute -bottom-5 left-0 right-0 flex items-center justify-center gap-3 z-20">
                   {socials.map(({ icon, href, label }) => (
-                    <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
-                      className="w-10 h-10 rounded-full flex items-center justify-center
-                                 text-white hover:text-cyan-400
-                                 hover:shadow-[0_0_16px_rgba(0,212,180,0.3)]
-                                 transition-all duration-200 border border-white/15
-                                 hover:border-cyan-400/50"
-                      style={{ background: "rgba(13,20,34,0.95)", backdropFilter: "blur(12px)" }}>
-                      {icon}
-                    </a>
+                      <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
+                        className="social-btn w-10 h-10 rounded-full flex items-center justify-center
+                                   text-white hover:text-cyan-400
+                                   hover:shadow-[0_0_16px_rgba(0,212,180,0.3)]
+                                   transition-all duration-200 border border-white/15
+                                   hover:border-cyan-400/50"
+                        style={{ background: "rgba(13,20,34,0.95)", backdropFilter: "blur(12px)" }}>
+                        {icon}
+                      </a>
                   ))}
                 </div>
               </div>

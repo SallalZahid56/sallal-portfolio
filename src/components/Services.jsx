@@ -54,7 +54,7 @@ function ServiceCard({ service, icon, index, inView }) {
 
   return (
     <div
-      className="group relative flex flex-col rounded-2xl border border-white/8 overflow-hidden
+      className="service-card group relative flex flex-col rounded-2xl border border-white/8 overflow-hidden
                  hover:border-cyan-400/35 transition-all duration-400
                  hover:shadow-[0_0_32px_rgba(0,212,180,0.08)]"
       style={{
@@ -83,7 +83,7 @@ function ServiceCard({ service, icon, index, inView }) {
             {service.number}
           </span>
           <div
-            className="w-11 h-11 rounded-xl flex items-center justify-center
+            className="service-icon w-11 h-11 rounded-xl flex items-center justify-center
                        border border-white/10 text-white/45
                        group-hover:border-cyan-400/40 group-hover:text-cyan-400
                        transition-all duration-300"
