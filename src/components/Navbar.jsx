@@ -38,6 +38,32 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
 
+  // Apply theme to document and persist preference
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) {
+      const isDark = saved === "dark";
+      setDarkMode(isDark);
+      if (isDark) document.documentElement.classList.remove("light");
+      else document.documentElement.classList.add("light");
+    } else {
+      // default: dark
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+      setDarkMode(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.add("light");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   useEffect(() => {
     const onScroll = () => {
       const ids = navLinks.map(l => l.href.replace("#", ""));

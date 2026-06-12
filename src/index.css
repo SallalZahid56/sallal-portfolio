@@ -63,6 +63,29 @@
   }
 }
 
+/* Light theme overrides (applied when `html` has class `light`) */
+html.light, html.light body {
+  background-color: #f8fafc;
+  color: #0a0f1a;
+}
+
+html.light .section-title,
+html.light .text-white {
+  color: #0a0f1a !important;
+}
+
+/* Tailwind class with slash needs escaping in selector */
+html.light .text-white\/55 {
+  color: rgba(10,15,26,0.55) !important;
+}
+
+html.light .bg-glass,
+html.light .bg-glass-dark,
+html.light .card-dark {
+  background: rgba(255,255,255,0.85);
+  border-color: rgba(10,15,26,0.06);
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
