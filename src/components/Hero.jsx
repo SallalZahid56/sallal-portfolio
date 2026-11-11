@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { personal } from "../data/portfolio.js";
-import heroImg from "../assets/hero.jpg";
 import heroVideo from "../assets/bg-video.mp4";
+
+/* ── Palette (change here to restyle the whole hero) ── */
+const ACCENT = "#A78BFA";        // violet
+const ACCENT_2 = "#60A5FA";      // sky blue
+const BASE = "7,7,15";           // near-black (rgb) used for overlays
+const GRADIENT_TEXT = `linear-gradient(90deg, ${ACCENT}, ${ACCENT_2})`;
 
 const roles = [
   "Full Stack Developer",
@@ -30,13 +35,16 @@ function StatPill({ value, suffix, label, animate }) {
   const count = useCounter(value, 1800, animate);
   return (
     <div
-      className="flex-1 flex flex-col items-center justify-center py-4 px-3
-                 border-r border-white/10 last:border-r-0"
+      className="flex flex-col items-center justify-center py-4 px-3"
+      style={{ background: `rgba(${BASE},0.78)`, backdropFilter: "blur(14px)" }}
     >
-      <span className="font-syne font-extrabold text-3xl md:text-4xl text-white leading-none">
-        {count}<span className="text-cyan-400">{suffix}</span>
+      <span className="font-syne font-extrabold text-2xl md:text-3xl text-white leading-none">
+        {count}
+        <span style={{ color: ACCENT }}>{suffix}</span>
       </span>
-      <span className="font-dm text-sm text-white/60 mt-1 whitespace-nowrap">{label}</span>
+      <span className="font-dm text-xs md:text-sm text-white/70 mt-1 whitespace-nowrap">
+        {label}
+      </span>
     </div>
   );
 }
@@ -64,9 +72,9 @@ export default function Hero() {
   const [displayed, setDisplayed] = useState("");
   const [typing, setTyping] = useState(true);
   const [animate, setAnimate] = useState(false);
-  const imgWrapRef = useRef(null);
   const videoRef = useRef(null);
 
+  /* Typewriter */
   useEffect(() => {
     const current = roles[roleIndex];
     let timeout;
@@ -89,22 +97,18 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, [displayed, typing, roleIndex]);
 
+  /* Start stat counters */
   useEffect(() => {
     const t = setTimeout(() => setAnimate(true), 600);
     return () => clearTimeout(t);
   }, []);
 
-  useEffect(() => {
-    // removed mousemove tilt effect to keep hero image static
-    return () => { };
-  }, []);
-
-
+  /* Force muted autoplay */
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
     v.muted = true;
-    v.play().catch(() => { });
+    v.play().catch(() => {});
   }, []);
 
   const socials = [
@@ -117,12 +121,15 @@ export default function Hero() {
     { value: 2, suffix: "+", label: "Years Exp." },
     { value: 20, suffix: "+", label: "Projects" },
     { value: 5, suffix: "+", label: "Happy Clients" },
-    { value: 300, suffix: "+", label: "Code Commits" },
+    { value: 800, suffix: "+", label: "Code Commits" },
   ];
 
   return (
-    <section id="home" className="relative min-h-screen flex flex-col justify-center overflow-hidden">
-
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
+    >
+      {/* Background video */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
@@ -133,131 +140,177 @@ export default function Hero() {
         playsInline
         preload="auto"
       />
-      {/* Glows */}
-      <div className="absolute inset-0 pointer-events-none select-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(0,212,180,0.07) 0%, transparent 65%)" }} />
-        <div className="absolute bottom-[5%] left-[-8%] w-[500px] h-[500px] rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(0,100,255,0.05) 0%, transparent 65%)" }} />
-      </div>
 
-      {/* Two col */}
-      <div className="section-padding w-full pt-[110px] pb-6 relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+      {/* Mobile overlay: even darkening because text spans the full width */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none lg:hidden"
+        style={{ background: `rgba(${BASE},0.78)` }}
+      />
 
-          {/* LEFT */}
-          <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
+      {/* Desktop overlay: dark on the text side, fades out so the video stays clear on the right */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none hidden lg:block"
+        style={{
+          background: `linear-gradient(90deg,
+            rgba(${BASE},0.95) 0%,
+            rgba(${BASE},0.82) 32%,
+            rgba(${BASE},0.30) 62%,
+            rgba(${BASE},0) 100%)`,
+        }}
+      />
 
-            <div className="flex items-center gap-3 mb-5 animate-fade-up"
-              style={{ animationDelay: "0.1s", animationFillMode: "both" }}>
-              <span className="w-8 h-px bg-cyan-400/60" />
-              <span className="section-label text-[11px]">Welcome to my portfolio</span>
-              <span className="w-8 h-px bg-cyan-400/60" />
-            </div>
+      {/* Content: left aligned, right side left open for the video */}
+      <div className="section-padding w-full pt-[110px] pb-16 relative z-10">
+        <div className="flex flex-col items-center lg:items-start text-center lg:text-left max-w-[620px]">
 
-            <p className="font-dm text-white/50 text-lg font-light mb-1 animate-fade-up"
-              style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
-              Hi, I'm
-            </p>
+          <div
+            className="flex items-center gap-3 mb-5 animate-fade-up"
+            style={{ animationDelay: "0.1s", animationFillMode: "both" }}
+          >
+            <span className="w-8 h-px" style={{ background: ACCENT }} />
+            <span
+              className="font-dm text-[11px] uppercase tracking-[3px] font-medium"
+              style={{ color: ACCENT }}
+            >
+              Welcome to my portfolio
+            </span>
+          </div>
 
-            <h1 className="font-syne font-extrabold text-5xl md:text-6xl lg:text-[4.5rem] text-white leading-[1.05] mb-4 animate-fade-up"
-              style={{ animationDelay: "0.3s", animationFillMode: "both" }}>
-              {personal.name.split(" ")[0]}{" "}
-              <span className="text-gradient">{personal.name.split(" ")[1]}</span>
-            </h1>
+          <p
+            className="font-dm text-white/70 text-lg font-light mb-1 animate-fade-up"
+            style={{ animationDelay: "0.2s", animationFillMode: "both" }}
+          >
+            Hi, I'm
+          </p>
 
-            <div className="flex items-center gap-2 mb-5 h-7 animate-fade-up"
-              style={{ animationDelay: "0.4s", animationFillMode: "both" }}>
-              <span className="font-dm text-white/40 text-base font-light">—</span>
-              <span className="font-dm text-white/80 text-base md:text-lg font-medium">
-                {displayed}
-                <span className="inline-block w-[2px] h-[18px] bg-cyan-400 ml-[2px] align-middle animate-pulse" />
-              </span>
-            </div>
+          <h1
+            className="font-syne font-extrabold text-5xl md:text-6xl lg:text-[4.5rem] text-white leading-[1.05] mb-4 animate-fade-up"
+            style={{ animationDelay: "0.3s", animationFillMode: "both" }}
+          >
+            {personal.name.split(" ")[0]}{" "}
+            <span
+              style={{
+                backgroundImage: GRADIENT_TEXT,
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                color: "transparent",
+              }}
+            >
+              {personal.name.split(" ")[1]}
+            </span>
+          </h1>
 
-            {/* Description — pure white */}
-            <p className="font-dm text-white text-sm md:text-[15px] leading-[1.9] max-w-[500px] mb-8 animate-fade-up"
-              style={{ animationDelay: "0.5s", animationFillMode: "both", opacity: 0.82 }}>
-              I'm a passionate Full Stack Developer with 2+ years of experience building
-              modern, scalable web applications from concept to deployment. I specialize
-              in the MERN stack — crafting clean frontends with React and robust backends
-              with Node.js &amp; Express. I care deeply about performance, clean code, and
-              delivering experiences that users actually love.
-            </p>
+          <div
+            className="flex items-center gap-2 mb-5 h-7 animate-fade-up"
+            style={{ animationDelay: "0.4s", animationFillMode: "both" }}
+          >
+            <span className="font-dm text-white/50 text-base font-light">—</span>
+            <span className="font-dm text-white text-base md:text-lg font-medium">
+              {displayed}
+              <span
+                className="inline-block w-[2px] h-[18px] ml-[2px] align-middle animate-pulse"
+                style={{ background: ACCENT }}
+              />
+            </span>
+          </div>
 
-            <div className="flex items-center gap-3 animate-fade-up"
-              style={{ animationDelay: "0.6s", animationFillMode: "both" }}>
+          <p
+            className="font-dm text-white text-sm md:text-[15px] leading-[1.9] max-w-[500px] mb-8 animate-fade-up"
+            style={{
+              animationDelay: "0.5s",
+              animationFillMode: "both",
+              opacity: 0.92,
+              textShadow: "0 1px 12px rgba(0,0,0,0.6)",
+            }}
+          >
+            I'm a passionate Full Stack Developer with 2+ years of experience building
+            modern, scalable web applications from concept to deployment. I specialize
+            in the MERN stack — crafting clean frontends with React and robust backends
+            with Node.js &amp; Express. I care deeply about performance, clean code, and
+            delivering experiences that users actually love.
+          </p>
+
+          {/* Buttons + socials */}
+          <div
+            className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10 animate-fade-up"
+            style={{ animationDelay: "0.6s", animationFillMode: "both" }}
+          >
+            <a
+              href="#work"
+              className="px-6 py-3 rounded-full font-dm text-sm font-semibold text-white
+                         transition-transform duration-200 hover:-translate-y-0.5"
+              style={{
+                backgroundImage: GRADIENT_TEXT,
+                boxShadow: "0 8px 28px rgba(139,92,246,0.35)",
+              }}
+            >
+              View My Work
+            </a>
+            <a
+              href="#contact"
+              className="px-6 py-3 rounded-full font-dm text-sm font-semibold text-white
+                         border border-white/25 hover:border-white/60
+                         transition-colors duration-200"
+              style={{ background: `rgba(${BASE},0.5)`, backdropFilter: "blur(10px)" }}
+            >
+              Contact Me
+            </a>
+
+            <div className="flex items-center gap-3">
               {socials.map(({ icon, href, label }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={label}
                   className="w-11 h-11 rounded-full flex items-center justify-center
-                             border border-white/10 text-white/55
-                             hover:text-cyan-400 hover:border-cyan-400/50
-                             hover:shadow-[0_0_20px_rgba(0,212,180,0.22)]
+                             border border-white/15 text-white/70
+                             hover:text-white hover:border-white/50
                              transition-all duration-200"
-                  style={{ background: "rgba(13,20,34,0.7)", backdropFilter: "blur(12px)" }}>
+                  style={{ background: `rgba(${BASE},0.6)`, backdropFilter: "blur(12px)" }}
+                >
                   {icon}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* RIGHT — blob image */}
-          <div className="flex-shrink-0 flex items-center justify-center animate-fade-up"
-            style={{ animationDelay: "0.35s", animationFillMode: "both" }}>
-            <div ref={imgWrapRef} className="relative"
-              style={{ transition: "transform 0.12s ease-out", willChange: "transform", animation: "floatY 5s ease-in-out infinite" }}>
-              <div className="absolute -inset-6 pointer-events-none"
-                style={{
-                  background: "radial-gradient(ellipse, rgba(0,212,180,0.13) 0%, transparent 65%)",
-                  borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%"
-                }} />
-              <div className="relative overflow-hidden border border-cyan-400/20"
-                style={{
-                  width: "clamp(260px, 28vw, 360px)", aspectRatio: "3 / 4",
-                  borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%",
-                  background: "linear-gradient(160deg, rgba(0,212,180,0.08), rgba(0,60,180,0.06))"
-                }}>
-                <img src={heroImg} alt="Sallal Zahid"
-                  className="w-full h-full object-cover object-top"
-                  style={{ borderRadius: "inherit" }} />
-                <div className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: "linear-gradient(to top, rgba(10,15,26,0.45) 0%, transparent 40%)",
-                    borderRadius: "inherit"
-                  }} />
-              </div>
-            </div>
+          {/* Compact stats (kept on the left so the video stays unobstructed) */}
+          <div
+            className="grid grid-cols-2 sm:grid-cols-4 gap-px w-full max-w-[560px]
+                       rounded-2xl overflow-hidden border border-white/10 animate-fade-up"
+            style={{
+              background: "rgba(255,255,255,0.1)",
+              animationDelay: "0.8s",
+              animationFillMode: "both",
+            }}
+          >
+            {statData.map((s, i) => (
+              <StatPill key={i} {...s} animate={animate} />
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Stats — full width bar */}
-      <div className="section-padding pt-0 pb-14 relative z-10 animate-fade-up"
-        style={{ animationDelay: "0.8s", animationFillMode: "both" }}>
-        <div
-          className="flex items-stretch rounded-2xl overflow-hidden border border-white/10"
-          style={{ background: "rgba(13,20,34,0.7)", backdropFilter: "blur(16px)" }}
-        >
-          {statData.map((s, i) => (
-            <StatPill key={i} {...s} animate={animate} />
-          ))}
-        </div>
-      </div>
-
       {/* Scroll indicator */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2
-                      animate-fade-in z-10" style={{ animationDelay: "1.3s", animationFillMode: "both" }}>
-        <span className="font-dm text-[10px] text-white/20 tracking-[4px] uppercase">Scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-cyan-400/40 to-transparent" />
-        <div className="w-1 h-1 rounded-full bg-cyan-400/40 animate-bounce" />
+      <div
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in z-10"
+        style={{ animationDelay: "1.3s", animationFillMode: "both" }}
+      >
+        <span className="font-dm text-[10px] text-white/40 tracking-[4px] uppercase">
+          Scroll
+        </span>
+        <div
+          className="w-px h-8"
+          style={{ background: `linear-gradient(to bottom, ${ACCENT}99, transparent)` }}
+        />
+        <div
+          className="w-1 h-1 rounded-full animate-bounce"
+          style={{ background: ACCENT }}
+        />
       </div>
-
-      <style>{`
-        @keyframes floatY {
-          0%, 100% { transform: translateY(0); }
-          50%      { transform: translateY(-16px); }
-        }
-      `}</style>
     </section>
   );
 }
