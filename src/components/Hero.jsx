@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { personal } from "../data/portfolio.js";
 import heroImg from "../assets/hero.jpg";
+import heroVideo from "../assets/bg-video.mp4";
 
 const roles = [
   "Full Stack Developer",
@@ -42,28 +43,29 @@ function StatPill({ value, suffix, label, animate }) {
 
 const LinkedInIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-    <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" />
   </svg>
 );
 const GithubIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
   </svg>
 );
 const EmailIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-    <polyline points="22,6 12,13 2,6"/>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
   </svg>
 );
 
 export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayed, setDisplayed] = useState("");
-  const [typing,    setTyping]    = useState(true);
-  const [animate,   setAnimate]   = useState(false);
+  const [typing, setTyping] = useState(true);
+  const [animate, setAnimate] = useState(false);
   const imgWrapRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const current = roles[roleIndex];
@@ -94,24 +96,43 @@ export default function Hero() {
 
   useEffect(() => {
     // removed mousemove tilt effect to keep hero image static
-    return () => {};
+    return () => { };
+  }, []);
+
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => { });
   }, []);
 
   const socials = [
     { icon: <LinkedInIcon />, href: "https://www.linkedin.com/in/sallal-zahid-4984672bb", label: "LinkedIn" },
-    { icon: <GithubIcon />,   href: "https://github.com/SallalZahid56",                   label: "GitHub"   },
-    { icon: <EmailIcon />,    href: "mailto:sallalzahid51@gmail.com",                     label: "Email"    },
+    { icon: <GithubIcon />, href: "https://github.com/SallalZahid56", label: "GitHub" },
+    { icon: <EmailIcon />, href: "mailto:sallalzahid51@gmail.com", label: "Email" },
   ];
 
   const statData = [
-    { value: 2,   suffix: "+", label: "Years Exp."    },
-    { value: 20,  suffix: "+", label: "Projects"      },
-    { value: 5,   suffix: "+", label: "Happy Clients" },
-    { value: 300, suffix: "+", label: "Code Commits"  },
+    { value: 2, suffix: "+", label: "Years Exp." },
+    { value: 20, suffix: "+", label: "Projects" },
+    { value: 5, suffix: "+", label: "Happy Clients" },
+    { value: 300, suffix: "+", label: "Code Commits" },
   ];
 
   return (
     <section id="home" className="relative min-h-screen flex flex-col justify-center overflow-hidden">
+
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none"
+        src={heroVideo}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      />
       {/* Glows */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <div className="absolute top-[-10%] right-[-5%] w-[700px] h-[700px] rounded-full"
@@ -186,18 +207,24 @@ export default function Hero() {
             <div ref={imgWrapRef} className="relative"
               style={{ transition: "transform 0.12s ease-out", willChange: "transform", animation: "floatY 5s ease-in-out infinite" }}>
               <div className="absolute -inset-6 pointer-events-none"
-                style={{ background: "radial-gradient(ellipse, rgba(0,212,180,0.13) 0%, transparent 65%)",
-                         borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%" }} />
+                style={{
+                  background: "radial-gradient(ellipse, rgba(0,212,180,0.13) 0%, transparent 65%)",
+                  borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%"
+                }} />
               <div className="relative overflow-hidden border border-cyan-400/20"
-                style={{ width: "clamp(260px, 28vw, 360px)", aspectRatio: "3 / 4",
-                         borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%",
-                         background: "linear-gradient(160deg, rgba(0,212,180,0.08), rgba(0,60,180,0.06))" }}>
+                style={{
+                  width: "clamp(260px, 28vw, 360px)", aspectRatio: "3 / 4",
+                  borderRadius: "60% 40% 55% 45% / 50% 45% 55% 50%",
+                  background: "linear-gradient(160deg, rgba(0,212,180,0.08), rgba(0,60,180,0.06))"
+                }}>
                 <img src={heroImg} alt="Sallal Zahid"
                   className="w-full h-full object-cover object-top"
                   style={{ borderRadius: "inherit" }} />
                 <div className="absolute inset-0 pointer-events-none"
-                  style={{ background: "linear-gradient(to top, rgba(10,15,26,0.45) 0%, transparent 40%)",
-                           borderRadius: "inherit" }} />
+                  style={{
+                    background: "linear-gradient(to top, rgba(10,15,26,0.45) 0%, transparent 40%)",
+                    borderRadius: "inherit"
+                  }} />
               </div>
             </div>
           </div>
