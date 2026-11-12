@@ -2,10 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { personal } from "../data/portfolio.js";
 import heroVideo from "../assets/bg-video.mp4";
 
-/* ── Palette (change here to restyle the whole hero) ── */
-const ACCENT = "#A78BFA";        // violet
-const ACCENT_2 = "#60A5FA";      // sky blue
-const BASE = "7,7,15";           // near-black (rgb) used for overlays
+/* ── Earthy Green palette (the hero is always dark because of the video) ── */
+const ACCENT = "#84a98c";          // Muted Teal
+const ACCENT_2 = "#cad2c5";        // Ash Grey
+const BASE = "27,36,41";           // deep charcoal (rgb) for overlays
+const ON_ACCENT = "#1b2429";       // text on accent buttons
+const TEXT = "#f4f6f1";
+const MUTED = "rgba(202,210,197,0.82)";
+const FAINT = "rgba(202,210,197,0.55)";
 const GRADIENT_TEXT = `linear-gradient(90deg, ${ACCENT}, ${ACCENT_2})`;
 
 const roles = [
@@ -38,11 +42,17 @@ function StatPill({ value, suffix, label, animate }) {
       className="flex flex-col items-center justify-center py-4 px-3"
       style={{ background: `rgba(${BASE},0.78)`, backdropFilter: "blur(14px)" }}
     >
-      <span className="font-syne font-extrabold text-2xl md:text-3xl text-white leading-none">
+      <span
+        className="font-syne font-extrabold text-2xl md:text-3xl leading-none"
+        style={{ color: TEXT }}
+      >
         {count}
         <span style={{ color: ACCENT }}>{suffix}</span>
       </span>
-      <span className="font-dm text-xs md:text-sm text-white/70 mt-1 whitespace-nowrap">
+      <span
+        className="font-dm text-xs md:text-sm mt-1 whitespace-nowrap"
+        style={{ color: MUTED }}
+      >
         {label}
       </span>
     </div>
@@ -159,7 +169,13 @@ export default function Hero() {
         }}
       />
 
-      {/* Content: left aligned, right side left open for the video */}
+      {/* Bottom fade: blends the hero into the next section (works in light + dark theme) */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 z-[2] pointer-events-none"
+        style={{ background: "linear-gradient(to top, var(--bg), transparent)" }}
+      />
+
+      {/* Content */}
       <div className="section-padding w-full pt-[110px] pb-16 relative z-10">
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left max-w-[620px]">
 
@@ -177,15 +193,15 @@ export default function Hero() {
           </div>
 
           <p
-            className="font-dm text-white/70 text-lg font-light mb-1 animate-fade-up"
-            style={{ animationDelay: "0.2s", animationFillMode: "both" }}
+            className="font-dm text-lg font-light mb-1 animate-fade-up"
+            style={{ color: MUTED, animationDelay: "0.2s", animationFillMode: "both" }}
           >
             Hi, I'm
           </p>
 
           <h1
-            className="font-syne font-extrabold text-5xl md:text-6xl lg:text-[4.5rem] text-white leading-[1.05] mb-4 animate-fade-up"
-            style={{ animationDelay: "0.3s", animationFillMode: "both" }}
+            className="font-syne font-extrabold text-5xl md:text-6xl lg:text-[4.5rem] leading-[1.05] mb-4 animate-fade-up"
+            style={{ color: TEXT, animationDelay: "0.3s", animationFillMode: "both" }}
           >
             {personal.name.split(" ")[0]}{" "}
             <span
@@ -205,8 +221,8 @@ export default function Hero() {
             className="flex items-center gap-2 mb-5 h-7 animate-fade-up"
             style={{ animationDelay: "0.4s", animationFillMode: "both" }}
           >
-            <span className="font-dm text-white/50 text-base font-light">—</span>
-            <span className="font-dm text-white text-base md:text-lg font-medium">
+            <span className="font-dm text-base font-light" style={{ color: FAINT }}>—</span>
+            <span className="font-dm text-base md:text-lg font-medium" style={{ color: TEXT }}>
               {displayed}
               <span
                 className="inline-block w-[2px] h-[18px] ml-[2px] align-middle animate-pulse"
@@ -216,8 +232,9 @@ export default function Hero() {
           </div>
 
           <p
-            className="font-dm text-white text-sm md:text-[15px] leading-[1.9] max-w-[500px] mb-8 animate-fade-up"
+            className="font-dm text-sm md:text-[15px] leading-[1.9] max-w-[500px] mb-8 animate-fade-up"
             style={{
+              color: TEXT,
               animationDelay: "0.5s",
               animationFillMode: "both",
               opacity: 0.92,
@@ -238,21 +255,26 @@ export default function Hero() {
           >
             <a
               href="#work"
-              className="px-6 py-3 rounded-full font-dm text-sm font-semibold text-white
-                         transition-transform duration-200 hover:-translate-y-0.5"
+              className="px-6 py-3 rounded-full font-dm text-sm font-semibold
+                         transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110"
               style={{
-                backgroundImage: GRADIENT_TEXT,
-                boxShadow: "0 8px 28px rgba(139,92,246,0.35)",
+                background: ACCENT,
+                color: ON_ACCENT,
+                boxShadow: "0 8px 28px rgba(132,169,140,0.3)",
               }}
             >
               View My Work
             </a>
             <a
               href="#contact"
-              className="px-6 py-3 rounded-full font-dm text-sm font-semibold text-white
-                         border border-white/25 hover:border-white/60
+              className="px-6 py-3 rounded-full font-dm text-sm font-semibold
+                         border border-[#cad2c5]/35 hover:border-[#cad2c5]
                          transition-colors duration-200"
-              style={{ background: `rgba(${BASE},0.5)`, backdropFilter: "blur(10px)" }}
+              style={{
+                color: TEXT,
+                background: `rgba(${BASE},0.5)`,
+                backdropFilter: "blur(10px)",
+              }}
             >
               Contact Me
             </a>
@@ -266,8 +288,8 @@ export default function Hero() {
                   rel="noreferrer"
                   aria-label={label}
                   className="w-11 h-11 rounded-full flex items-center justify-center
-                             border border-white/15 text-white/70
-                             hover:text-white hover:border-white/50
+                             border border-[#cad2c5]/20 text-[#cad2c5]/80
+                             hover:text-[#f4f6f1] hover:border-[#84a98c]
                              transition-all duration-200"
                   style={{ background: `rgba(${BASE},0.6)`, backdropFilter: "blur(12px)" }}
                 >
@@ -277,12 +299,12 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Compact stats (kept on the left so the video stays unobstructed) */}
+          {/* Compact stats */}
           <div
             className="grid grid-cols-2 sm:grid-cols-4 gap-px w-full max-w-[560px]
-                       rounded-2xl overflow-hidden border border-white/10 animate-fade-up"
+                       rounded-2xl overflow-hidden border border-[#cad2c5]/15 animate-fade-up"
             style={{
-              background: "rgba(255,255,255,0.1)",
+              background: "rgba(202,210,197,0.15)",
               animationDelay: "0.8s",
               animationFillMode: "both",
             }}
@@ -299,17 +321,14 @@ export default function Hero() {
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in z-10"
         style={{ animationDelay: "1.3s", animationFillMode: "both" }}
       >
-        <span className="font-dm text-[10px] text-white/40 tracking-[4px] uppercase">
+        <span className="font-dm text-[10px] tracking-[4px] uppercase" style={{ color: FAINT }}>
           Scroll
         </span>
         <div
           className="w-px h-8"
           style={{ background: `linear-gradient(to bottom, ${ACCENT}99, transparent)` }}
         />
-        <div
-          className="w-1 h-1 rounded-full animate-bounce"
-          style={{ background: ACCENT }}
-        />
+        <div className="w-1 h-1 rounded-full animate-bounce" style={{ background: ACCENT }} />
       </div>
     </section>
   );

@@ -56,6 +56,22 @@ export default {
       },
     },
   },
+
+  theme: {
+    extend: {
+      colors: {
+        // Remap cyan to the theme variables, so every existing cyan-400/500 class re-themes itself
+        cyan: {
+          400: "rgb(var(--accent-rgb) / <alpha-value>)",
+          500: "rgb(var(--accent-strong-rgb) / <alpha-value>)",
+        },
+        // keep your other dark-xxx shades; just update 900
+        dark: {
+          900: "#1b2429",
+        },
+      },
+    },
+  },
   plugins: [],
 }
 

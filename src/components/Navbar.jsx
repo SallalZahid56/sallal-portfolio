@@ -37,8 +37,9 @@ export default function Navbar() {
   const [activeId, setActiveId] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [onHero, setOnHero] = useState(true); // true while the dark hero video is behind the logo
 
-  // Apply theme to document and persist preference
+  // Load saved theme once
   useEffect(() => {
     const saved = localStorage.getItem("theme");
     if (saved) {
@@ -47,13 +48,13 @@ export default function Navbar() {
       if (isDark) document.documentElement.classList.remove("light");
       else document.documentElement.classList.add("light");
     } else {
-      // default: dark
       document.documentElement.classList.remove("light");
       localStorage.setItem("theme", "dark");
       setDarkMode(true);
     }
   }, []);
 
+  // Apply + persist theme on toggle
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.remove("light");
@@ -64,16 +65,21 @@ export default function Navbar() {
     }
   }, [darkMode]);
 
+  // Active section + hero detection
   useEffect(() => {
     const onScroll = () => {
-      const ids = navLinks.map(l => l.href.replace("#", ""));
+      const ids = navLinks.map((l) => l.href.replace("#", ""));
       let current = "home";
-      ids.forEach(id => {
+      ids.forEach((id) => {
         const el = document.getElementById(id);
         if (el && window.scrollY >= el.offsetTop - 120) current = id;
       });
       setActiveId(current);
+
+      const hero = document.getElementById("home");
+      setOnHero(hero ? window.scrollY < hero.offsetHeight - 90 : false);
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -90,55 +96,56 @@ export default function Navbar() {
     if (target) target.scrollIntoView({ behavior: "smooth" });
   };
 
-  const pillStyle = darkMode
-    ? {
-        background: "rgba(13, 20, 34, 0.80)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-      }
-    : {
-        background: "rgba(255,255,255,0.85)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-      };
+  // Colors come from CSS variables in index.css, so light/dark switch automatically
+  const pillStyle = {
+    background: "var(--nav-bg)",
+    backdropFilter: "blur(20px)",
+    WebkitBackdropFilter: "blur(20px)",
+  };
+
+  // The hero is always dark (video), so the logo stays light while over it
+  const logoColor = onHero || darkMode ? "#f4f6f1" : "#2f3e46";
 
   return (
     <>
-      {/* ── NAVBAR — transparent wrapper, 3 zones ── */}
+      {/* ── NAVBAR ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[4%] pt-4 h-[76px]">
 
         {/* LEFT — Logo */}
         <a
           href="#home"
-          onClick={e => handleNavClick(e, "#home")}
+          onClick={(e) => handleNavClick(e, "#home")}
           className="flex items-end gap-[2px] group flex-shrink-0"
         >
-          <span className="font-syne font-extrabold text-[1.5rem] text-white tracking-tight leading-none">
+          <span
+            className="font-syne font-extrabold text-[1.5rem] tracking-tight leading-none transition-colors duration-300"
+            style={{ color: logoColor }}
+          >
             {personal.initials}
           </span>
           <span className="font-syne font-extrabold text-[1.5rem] text-cyan-400 leading-none">.</span>
           <span className="w-[6px] h-[6px] rounded-full bg-cyan-400 mb-[9px] ml-[2px]
                            animate-pulse-slow transition-shadow duration-300
-                           group-hover:shadow-[0_0_8px_rgba(0,212,180,0.9)]" />
+                           group-hover:shadow-[0_0_8px_rgba(132,169,140,0.9)]" />
         </a>
 
-        {/* CENTER — Pill: nav links + divider + Resume + Hire Me */}
+        {/* CENTER — Pill */}
         <div
           className="hidden lg:flex items-center gap-[3px] px-2 py-[7px] rounded-full
-                     border border-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+                     border border-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
           style={pillStyle}
         >
-          {navLinks.map(link => {
+          {navLinks.map((link) => {
             const isActive = activeId === link.href.replace("#", "");
             return (
               <a
                 key={link.href}
                 href={link.href}
-                onClick={e => handleNavClick(e, link.href)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`font-dm text-[13px] font-medium px-[14px] py-[6px] rounded-full
                   transition-all duration-200 whitespace-nowrap select-none
                   ${isActive
-                    ? "text-dark-900 bg-cyan-400 shadow-[0_2px_14px_rgba(0,212,180,0.4)]"
+                    ? "text-[color:var(--on-accent)] bg-cyan-400 shadow-[0_2px_14px_rgba(132,169,140,0.4)]"
                     : "text-white/55 hover:text-white hover:bg-white/[0.08]"
                   }`}
               >
@@ -166,21 +173,20 @@ export default function Navbar() {
           {/* Hire Me */}
           <a
             href="#contact"
-            onClick={e => handleNavClick(e, "#contact")}
+            onClick={(e) => handleNavClick(e, "#contact")}
             className="font-dm text-[12px] font-semibold tracking-[0.06em] uppercase
-                       text-dark-900 bg-cyan-400 px-[14px] py-[6px] rounded-full
-                       hover:bg-cyan-500 hover:shadow-[0_4px_16px_rgba(0,212,180,0.4)]
+                       text-[color:var(--on-accent)] bg-cyan-400 px-[14px] py-[6px] rounded-full
+                       hover:bg-cyan-500 hover:shadow-[0_4px_16px_rgba(132,169,140,0.4)]
                        transition-all duration-200 whitespace-nowrap flex-shrink-0"
           >
             Hire Me
           </a>
         </div>
 
-        {/* RIGHT — Theme toggle + mobile hamburger */}
+        {/* RIGHT — Theme toggle + hamburger */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          {/* Theme toggle button */}
           <button
-            onClick={() => setDarkMode(prev => !prev)}
+            onClick={() => setDarkMode((prev) => !prev)}
             aria-label="Toggle theme"
             className="w-9 h-9 rounded-full border border-white/[0.09] flex items-center justify-center
                        text-white/50 hover:text-cyan-400 hover:border-cyan-400/40
@@ -190,9 +196,8 @@ export default function Navbar() {
             {darkMode ? <SunIcon /> : <MoonIcon />}
           </button>
 
-          {/* Hamburger — mobile only */}
           <button
-            onClick={() => setMenuOpen(prev => !prev)}
+            onClick={() => setMenuOpen((prev) => !prev)}
             aria-label="Toggle menu"
             className="lg:hidden w-9 h-9 rounded-full border border-white/[0.09]
                        flex flex-col items-center justify-center gap-[5px]
@@ -209,7 +214,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* ── MOBILE MENU — floating card, drops below navbar ── */}
+      {/* ── MOBILE MENU ── */}
       <div
         className={`fixed top-[82px] left-[4%] right-[4%] z-40 rounded-2xl
           border border-white/[0.09] px-3 pb-4 pt-3
@@ -217,32 +222,24 @@ export default function Navbar() {
           ${menuOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-3 pointer-events-none"}`}
-        style={
-          darkMode
-            ? {
-                background: "rgba(10, 15, 26, 0.97)",
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
-              }
-            : {
-                background: "rgba(255,255,255,0.96)",
-                backdropFilter: "blur(24px)",
-                WebkitBackdropFilter: "blur(24px)",
-              }
-        }
+        style={{
+          background: "var(--menu-bg)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+        }}
       >
         <ul className="flex flex-col gap-[2px] mb-3">
-          {navLinks.map(link => {
+          {navLinks.map((link) => {
             const isActive = activeId === link.href.replace("#", "");
             return (
               <li key={link.href}>
                 <a
                   href={link.href}
-                  onClick={e => handleNavClick(e, link.href)}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className={`flex items-center font-dm font-medium text-[14px] px-4 py-[10px] rounded-xl
                     transition-all duration-200 border-l-2
                     ${isActive
-                      ? "text-cyan-400 bg-cyan-400/[0.08] border-cyan-400"
+                      ? "text-cyan-400 bg-cyan-400/[0.10] border-cyan-400"
                       : "text-white/55 border-transparent hover:text-white hover:bg-white/[0.04] hover:border-cyan-400/30"
                     }`}
                 >
@@ -257,7 +254,7 @@ export default function Navbar() {
             className="btn-outline text-[11px] py-2 px-3 flex-1 text-center">
             Resume
           </a>
-          <a href="#contact" onClick={e => handleNavClick(e, "#contact")}
+          <a href="#contact" onClick={(e) => handleNavClick(e, "#contact")}
             className="btn-primary text-[11px] py-2 px-3 flex-1 text-center">
             Hire Me
           </a>
